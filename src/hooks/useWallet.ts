@@ -10,7 +10,7 @@ import { Web3Provider } from "@ethersproject/providers";
 type ConnectType = "metamask" | "walletconnect";
 
 export default function useWallet() {
-  const { account, provider } = useWeb3React();
+  const { account, provider, chainId } = useWeb3React();
 
   useEffect(() => {
     const connectType = localStorage.getItem("connectType");
@@ -19,12 +19,12 @@ export default function useWallet() {
     connector.connectEagerly();
   }, []);
 
-  function connect(connectType: ConnectType) {
+  function connect(connectType: ConnectType): Promise<void> {
     if (connectType) {
       localStorage.setItem("connectType", connectType);
     }
     const connector = getConnector(connectType);
-    connector.activate();
+    return connector.activate();
   }
 
   const shortAddress = useMemo(() => {
@@ -38,6 +38,7 @@ export default function useWallet() {
     provider: provider as Web3Provider,
     account,
     shortAddress,
+    chainId,
   };
 }
 

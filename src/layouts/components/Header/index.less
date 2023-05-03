@@ -1,0 +1,40 @@
+.header {
+  height: 98px;
+  background-color: #21263e;
+  color: #fff;
+  .headerContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 980px;
+    height: 98px;
+    margin: 0 auto;
+
+    .headerRight {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      div {
+        display: flex;
+        margin-left: 10px;
+        background-color: #3f4042;
+        border-radius: 8px;
+        > span {
+          display: inline-block;
+          line-height: 38px;
+          padding: 0 10px;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+        .address {
+          background-color: #6162e9;
+        }
+      }
+      > button {
+        height: 38px;
+        margin-left: 15px;
+      }
+    }
+  }
+}
