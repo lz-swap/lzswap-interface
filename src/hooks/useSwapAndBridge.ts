@@ -1,16 +1,18 @@
 import { makeContract, SwapAndBridge } from "./useContract";
 import useWallet from "./useWallet";
 import { ContractAddress } from "@/constants";
-import { ethers, ContractTransaction } from "ethers";
+import { ethers, ContractTransaction, BigNumber } from "ethers";
 
 import SWAP_AND_BRIDGE_ABI from "@/abi/swapAndBridge.abi.json";
+import { toBN } from "@/utils/bn";
 
 export default function useSwapAndBrdige() {
   const { provider, account, chainId } = useWallet();
 
   async function swapAndBridge(
     amountIn: string,
-    dstChainId: number
+    dstChainId: number,
+    nativeFee: BigNumber
   ): Promise<ContractTransaction | undefined> {
     if (provider && account && chainId) {
       const swapAndBridge = makeContract<SwapAndBridge>(
@@ -29,7 +31,10 @@ export default function useSwapAndBrdige() {
         ethers.constants.AddressZero,
         "0x",
         {
-          value: ethers.utils.parseEther(amountIn.toString()).mul(2).toString(),
+          value: toBN(amountIn)
+            .multipliedBy(1e18)
+            .plus(toBN(nativeFee))
+            .toString(),
         }
       );
     }

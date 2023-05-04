@@ -1,23 +1,5 @@
 import styles from "./index.less";
 import { Input, Select } from "antd";
-import { ChainList, AddEthereumChainParameter } from "@/constants/chainlist";
-
-const { Option } = Select;
-
-const symbolOptions = Object.values(ChainList).map((item) => {
-  return {
-    value: item.chainId,
-    label: item.nativeCurrency.symbol,
-  };
-});
-const chainOptions = Object.values(ChainList).map(
-  (item: AddEthereumChainParameter) => {
-    return {
-      value: item.chainId,
-      label: `${item.chainName} (${item.nativeCurrency.symbol})`,
-    };
-  }
-);
 
 interface InputBoxProps {
   onSelect?: (value: string, option: any) => void;
@@ -25,6 +7,8 @@ interface InputBoxProps {
   disableInput?: boolean;
   symbol?: string;
   value?: string | number;
+  options: { label: string; value: string | number }[];
+  defaultValue?: string | undefined;
 }
 
 export default function InputBox({
@@ -33,6 +17,8 @@ export default function InputBox({
   disableInput,
   symbol,
   value,
+  defaultValue,
+  options,
 }: InputBoxProps) {
   return (
     <div className={styles.inputBox}>
@@ -44,18 +30,12 @@ export default function InputBox({
         disabled={disableInput}
         addonAfter={symbol}
       ></Input>
-      {/* <div>
-        <Select
-          placeholder="select token"
-          options={symbolOptions}
-          onSelect={onSelect}
-        ></Select>
-      </div> */}
       <div>
         <Select
           placeholder="select chain"
-          options={chainOptions}
+          options={options}
           onSelect={onSelect}
+          defaultValue={defaultValue}
         ></Select>
       </div>
     </div>

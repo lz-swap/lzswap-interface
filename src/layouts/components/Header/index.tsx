@@ -7,8 +7,10 @@ import { BigNumberLike, toBN } from "@/utils/bn";
 import { toFixed } from "@/utils/helper";
 import { ChainList, AddEthereumChainParameter } from "@/constants/chainlist";
 
+import { useGlobalStore } from "@/models";
+
 export default function Header() {
-  const [balance, setBalance] = useState<BigNumberLike>("0");
+  const { setBalanceStore, balance } = useGlobalStore();
   const [chainInfo, setChainInfo] = useState<
     AddEthereumChainParameter | undefined
   >();
@@ -24,7 +26,7 @@ export default function Header() {
   useEffect(() => {
     if (account && provider) {
       provider.getBalance(account).then((res) => {
-        setBalance(res);
+        setBalanceStore(res);
       });
     }
   }, [account, provider]);

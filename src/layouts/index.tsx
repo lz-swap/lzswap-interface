@@ -3,16 +3,20 @@ import styles from "./index.less";
 import WalletProvider from "@/components/WalletProvider";
 import Header from "./components/Header";
 
+import { HoxRoot } from "hox";
+
 export default function Layout() {
   return (
     <>
       <WalletProvider>
-        <div className={styles.container}>
-          <Header />
-          <div className={styles.containerWraper}>
-            <Outlet />
+        <HoxRoot>
+          <div className={styles.container}>
+            <Header />
+            <div className={styles.containerWraper}>
+              <Outlet />
+            </div>
           </div>
-        </div>
+        </HoxRoot>
       </WalletProvider>
     </>
   );

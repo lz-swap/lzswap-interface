@@ -1,9 +1,5 @@
-import {
-  Contract,
-  ContractInterface,
-  ContractTransaction,
-  BigNumber,
-} from "ethers";
+import { Contract, ContractInterface, ContractTransaction } from "ethers";
+import { BigNumber } from "ethers";
 import { BigNumberLike } from "@/utils/bn";
 
 import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
@@ -40,4 +36,14 @@ export interface SwapAndBridge extends Contract {
     adapterParams: string,
     ...rest: any[]
   ) => Promise<ContractTransaction>;
+}
+
+export interface OFTContract extends ERC20Contract {
+  estimateSendFee: (
+    dstChainId: number,
+    to: string,
+    amount: BigNumberLike,
+    useZro: boolean,
+    adapterParams: string
+  ) => Promise<{ nativeFee: BigNumber; zroFee: BigNumber }>;
 }
