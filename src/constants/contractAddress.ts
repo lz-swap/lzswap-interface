@@ -7,7 +7,7 @@ interface ContractAddressConfig {
 }
 export const ContractAddress: { [chainId: number]: ContractAddressConfig } = {
   [ChainIds.SEPOLIA]: {
-    swapAndBridge: "0xcAEA67c52F8423e476C535421720aAA98D543027",
+    swapAndBridge: "0xEf85299dD97D7Db1f9c31C911Fa08C3704235401",
     oft: "0x25E962fAF6Dfbe7C889f046F3a539892174bc91E",
     routerV2: "0x67099583A536913Fc4F2e09eE8e5831c76453DaC",
     WETH: "0xBDFFB5C4F47036ABE048A1DC964B84E45767B3d2",

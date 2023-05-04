@@ -22,6 +22,8 @@ export default function useSwapAndBrdige() {
         account
       );
 
+      console.log({ swapAndBridge, amountIn, dstChainId, nativeFee });
+
       return swapAndBridge.swapAndBridge(
         ethers.utils.parseEther(amountIn),
         0,

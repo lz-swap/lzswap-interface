@@ -94,6 +94,7 @@ export default function Swap() {
     try {
       setLoading(true);
       const tx = await swapAndBridge(amountIn, dstChainId, nativeFee);
+      await tx?.wait();
       if (tx) {
         console.log({ tx: tx.hash });
       }
