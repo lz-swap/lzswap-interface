@@ -1,0 +1,70 @@
+.inputBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 980px;
+  height: 123px;
+  background-color: #21263e;
+  border-radius: 12px;
+  padding: 0 30px;
+  :global(.ant-input) {
+    line-height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    border-bottom: solid 1px #fff;
+    color: #fff;
+    outline: none;
+    border-radius: 0;
+    &:focus {
+      border: none;
+      box-shadow: none;
+      border-bottom: solid 1px #fff;
+    }
+  }
+  :global(.ant-input-group-addon) {
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    border-bottom: solid 1px #fff;
+  }
+  > div {
+    width: 280px;
+    text-align: center;
+    margin-left: 20px;
+    border-radius: 12px;
+    background-color: #2b314f;
+    color: #fff;
+    :global(.ant-select) {
+      width: 280px;
+      outline: none;
+      line-height: 50px;
+      :global(.ant-select-selector) {
+        height: 50px;
+        :global(.ant-select-selection-item) {
+          line-height: 50px;
+          font-size: 18px;
+        }
+        :global(.ant-select-selection-placeholder) {
+          line-height: 50px;
+          font-size: 18px;
+          color: rgba(0, 0, 0, 0.5);
+        }
+      }
+    }
+  }
+
+  .ant-input {
+    height: 50px;
+  }
+}
+
+:global {
+  .ant-select-item-option-content {
+    font-size: 16px;
+    font-weight: 400;
+  }
+}

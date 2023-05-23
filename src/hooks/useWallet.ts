@@ -27,6 +27,16 @@ export default function useWallet() {
     return connector.activate();
   }
 
+  const disconnect = (connectType: ConnectType) => {
+    if (connectType) {
+      localStorage.setItem("connectType", connectType);
+    }
+    const connector = getConnector(connectType);
+    connector.resetState();
+
+    localStorage.removeItem("connectType");
+  };
+
   const shortAddress = useMemo(() => {
     if (account) {
       return `${account.slice(0, 6)}...${account.slice(-4)}`;
@@ -35,6 +45,7 @@ export default function useWallet() {
 
   return {
     connect,
+    disconnect,
     provider: provider as Web3Provider,
     account,
     shortAddress,

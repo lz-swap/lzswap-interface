@@ -3,5 +3,11 @@ export default [
     exact: false,
     path: "/",
     component: "@/layouts/index",
+    routes: [
+      {
+        path: "/liquidity",
+        component: "liquidity",
+      },
+    ],
   },
 ];

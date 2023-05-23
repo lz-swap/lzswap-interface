@@ -1,42 +1,34 @@
 import styles from "./index.less";
-import { Input, Select } from "antd";
-
-interface InputBoxProps {
-  onSelect?: (value: string, option: any) => void;
-  onInputValueChange?: (value: string) => void;
-  disableInput?: boolean;
-  symbol?: string;
-  value?: string | number;
-  options: { label: string; value: string | number }[];
-  defaultValue?: string | undefined;
-}
-
-export default function InputBox({
-  onSelect,
-  onInputValueChange,
-  disableInput,
-  symbol,
-  value,
-  defaultValue,
-  options,
-}: InputBoxProps) {
+import { Input } from "antd";
+export default function InputBox() {
   return (
-    <div className={styles.inputBox}>
-      <Input
-        value={value}
-        onChange={(e) =>
-          onInputValueChange && onInputValueChange(e.target.value)
-        }
-        disabled={disableInput}
-        addonAfter={symbol}
-      ></Input>
-      <div>
-        <Select
-          placeholder="select chain"
-          options={options}
-          onSelect={onSelect}
-          defaultValue={defaultValue}
-        ></Select>
+    <div>
+      <div className={styles.chainBox}>
+        <div className={styles.boxLeft}>
+          <span>From</span>
+          <div className={styles.chainName}>
+            <i className={styles.chainIcon}></i>
+            <span>Ethereum Mainnet</span>
+            <i className={styles.arrorIcon}></i>
+          </div>
+        </div>
+        <i></i>
+      </div>
+
+      {/* amount input */}
+      <div className={styles.amountInputBox}>
+        <div className={styles.balanceInfo}>
+          <span>Send</span>
+          <span>MAX: 0</span>
+        </div>
+        <div className={styles.inputBox}>
+          <Input></Input>
+          <div className={styles.tokenInfo}>
+            <i className={styles.coinIcon}></i>
+            <span>USDC</span>
+            <i className={styles.arrowIcon}></i>
+          </div>
+        </div>
       </div>
     </div>
   );
