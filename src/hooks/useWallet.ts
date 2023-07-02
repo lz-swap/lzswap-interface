@@ -1,10 +1,12 @@
 import { useWeb3React } from "@web3-react/core";
 import { MetaMask } from "@web3-react/metamask";
 import { WalletConnect } from "@web3-react/walletconnect";
+import { BigNumber, ethers } from "ethers";
+import { ChainList } from "@/constants/chainlist";
 
 import { metamask } from "@/connectors/metamask";
 import { walletconnect } from "@/connectors/walletconnect";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 
 type ConnectType = "metamask" | "walletconnect";
@@ -53,6 +55,19 @@ export default function useWallet() {
   };
 }
 
+export function useBalance(): BigNumber {
+  const { account, provider, chainId } = useWeb3React();
+  const [balance, setBalance] = useState<BigNumber>(BigNumber.from(0));
+  useMemo(() => {
+    if (account && provider) {
+      provider.getBalance(account).then((b) => {
+        setBalance(b);
+      });
+    }
+  }, [chainId]);
+  return balance;
+}
+
 function getConnector(connectType: ConnectType): MetaMask | WalletConnect {
   if (connectType === "metamask") {
     return metamask;
@@ -60,4 +75,24 @@ function getConnector(connectType: ConnectType): MetaMask | WalletConnect {
     return walletconnect;
   }
   return metamask;
+}
+
+export function addChainId(chainId: number) {
+  return window.ethereum.request({
+    method: "wallet_addEthereumChain",
+    params: [ChainList[chainId]],
+  });
+}
+
+export async function switchToChainId(chainId: number): Promise<void> {
+  await addChainId(chainId);
+
+  return window.ethereum.request({
+    method: "wallet_switchEthereumChain",
+    params: [
+      {
+        chainId: ethers.utils.hexlify(chainId),
+      },
+    ],
+  });
 }

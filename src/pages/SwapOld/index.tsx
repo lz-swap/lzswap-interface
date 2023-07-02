@@ -10,7 +10,7 @@ import useWallet from "@/hooks/useWallet";
 import useOFT from "@/hooks/useOFT";
 
 import { switchChain } from "@/utils";
-import { onlyNumber, toFixed } from "@/utils/helper";
+import { onlyNumber, toFixed } from "@/utils/bn";
 import { ContractAddress, LZChainIds } from "@/constants";
 import { ChainList, AddEthereumChainParameter } from "@/constants/chainlist";
 import { useGlobalStore } from "@/models";

@@ -6,7 +6,7 @@ import { ChainList } from "@/constants/chainlist";
 import styles from "./index.less";
 
 interface ChainListModalProps extends ModalFuncProps {
-  onSelected: (tokenName: string | number) => void;
+  onSelected: (chainId: number) => void;
 }
 
 export default function ChainListModal(props: ChainListModalProps) {
@@ -24,7 +24,7 @@ export default function ChainListModal(props: ChainListModalProps) {
         </div>
         <ul className={c(styles["token-list"])}>
           {Object.values(ChainList).map(({ chainName, chainId }) => (
-            <li key={chainName} onClick={() => onSelected(chainName)}>
+            <li key={chainName} onClick={() => onSelected(Number(chainId))}>
               <ChainListItem title={chainName} />
             </li>
           ))}
