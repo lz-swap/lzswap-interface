@@ -2,15 +2,14 @@ import c from "classnames";
 import { ModalFuncProps, Input } from "antd";
 import BaseModal from "../BaseModal";
 
-import TokenList from "@/constants/tokenlist";
-
+import { ChainList } from "@/constants/chainlist";
 import styles from "./index.less";
 
-interface TokenListModalProps extends ModalFuncProps {
+interface ChainListModalProps extends ModalFuncProps {
   onSelected: (tokenName: string | number) => void;
 }
 
-export default function TokenListModal(props: TokenListModalProps) {
+export default function ChainListModal(props: ChainListModalProps) {
   const { onSelected, ...rest } = props;
   return (
     <BaseModal title="Select a token" footer={false} {...rest}>
@@ -24,9 +23,9 @@ export default function TokenListModal(props: TokenListModalProps) {
           </p>
         </div>
         <ul className={c(styles["token-list"])}>
-          {TokenList.map(({ symbol, desc }) => (
-            <li key={symbol + desc} onClick={() => onSelected(symbol)}>
-              <TokenListItem symbol={symbol} desc={desc} />
+          {Object.values(ChainList).map(({ chainName, chainId }) => (
+            <li key={chainName} onClick={() => onSelected(chainName)}>
+              <ChainListItem title={chainName} />
             </li>
           ))}
         </ul>
@@ -35,19 +34,15 @@ export default function TokenListModal(props: TokenListModalProps) {
   );
 }
 
-interface TokenListItemProps {
-  symbol: string;
-  desc: string;
+interface ChainListItemProps {
+  title: string;
 }
-function TokenListItem({ symbol, desc }: TokenListItemProps) {
+function ChainListItem({ title }: ChainListItemProps) {
   return (
     <div className={c(["flex-row", styles["token-list-item"]])}>
       <div className={c(styles["token-info"])}>
         <i></i>
-        <span>{symbol}</span>
-      </div>
-      <div className={c(styles["price-info"])}>
-        <span>{desc}</span>
+        <span>{title}</span>
       </div>
     </div>
   );

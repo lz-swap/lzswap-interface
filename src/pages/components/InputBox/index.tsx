@@ -1,12 +1,22 @@
 import styles from "./index.less";
-import { Input } from "antd";
-export default function InputBox() {
+import { Input, InputProps } from "antd";
+
+interface InputBoxProps extends InputProps {
+  showTokenList: () => void;
+  showChainList: () => void;
+}
+
+export default function InputBox({
+  showTokenList,
+  showChainList,
+  ...rest
+}: InputBoxProps) {
   return (
     <div className={styles.inputBox}>
       <div className={styles.chainBox}>
         <div className={styles.boxLeft}>
           <span>From</span>
-          <div className={styles.chainName}>
+          <div className={styles.chainName} onClick={showChainList}>
             <i className={styles.chainIcon}></i>
             <span>Ethereum Mainnet</span>
             <i className={styles.arrorIcon}></i>
@@ -22,8 +32,8 @@ export default function InputBox() {
           <span>MAX: 0</span>
         </div>
         <div className={styles.inputBox}>
-          <Input></Input>
-          <div className={styles.tokenInfo}>
+          <Input {...rest}></Input>
+          <div className={styles.tokenInfo} onClick={showTokenList}>
             <i className={styles.coinIcon}></i>
             <span>USDC</span>
             <i className={styles.arrowIcon}></i>
