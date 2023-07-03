@@ -67,7 +67,8 @@ export default function Swap() {
         destChainId,
         nativeFee
       );
-      await tx?.wait(2);
+      await tx?.wait();
+      message.success("swap and bridge success");
       loopScanUrl(tx?.hash);
     } catch (error) {
       message.error(error.message);
