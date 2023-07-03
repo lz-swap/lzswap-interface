@@ -1,13 +1,18 @@
 import styles from "./index.less";
 import { useState } from "react";
-import { Input, Button } from "antd";
+import { Button, message } from "antd";
+
 import InputBox from "../components/InputBox";
 import OutputBox from "../components/OutputBox";
-
 import TokenListModal from "@/components/TokenListModal";
 import ChainListModal from "@/components/ChainListModal";
 import useWallet, { switchToChainId, useBalance } from "@/hooks/useWallet";
 import { onlyNumber, NumType, toBN } from "@/utils/bn";
+import { LZChainIds } from "@/constants";
+import useSwapAndBrdige from "@/hooks/useSwapAndBridge";
+import useOFT from "@/hooks/useOFT";
+import useNotification from "@/components/Notification";
+import getMessagesBySrcTxHash, { generateLZScanUrl } from "@/utils/lzscan";
 
 export default function Swap() {
   const [isShowTokenList, setIsShowTokenList] = useState(false);
@@ -19,6 +24,10 @@ export default function Swap() {
   const [amountIn, setAmountIn] = useState<string | number>(0);
   const [amountOut, setAmountOut] = useState(0);
   const [currentShowChainList, setCurrentShowChainList] = useState("from");
+  const { swapAndBridge } = useSwapAndBrdige();
+  const { estimateSendFee } = useOFT();
+  const [loading, setLoading] = useState(false);
+  const { notify, contextHolder } = useNotification();
 
   const exchangeInputOutput = async () => {
     const tempChainId = fromChainId;
@@ -28,11 +37,66 @@ export default function Swap() {
   };
 
   const handleInputMax = () => {
-    setAmountIn(toBN(balance).div(1e18).toString());
+    setAmountIn(toBN(balance).div(1e18).minus(0.003).toString());
+  };
+
+  const loopScanUrl = (txhash: string) => {
+    const interval = setInterval(async () => {
+      const { messages } = await getMessagesBySrcTxHash(txhash);
+      if (messages.length > 0) {
+        const lzscanUrl = generateLZScanUrl(messages[0]);
+        notify("swap success", lzscanUrl, "success");
+        clearInterval(interval);
+      }
+    }, 2000);
+  };
+
+  const handleSwap = async () => {
+    try {
+      const destChainId = LZChainIds[toChainId].lzChainId;
+      const nativeFee = (
+        await estimateSendFee(
+          destChainId,
+          account!,
+          toBN(amountIn).multipliedBy(1e18).toString()
+        )
+      ).nativeFee;
+      setLoading(true);
+      const tx = await swapAndBridge(
+        toBN(amountIn).toString(),
+        destChainId,
+        nativeFee
+      );
+      await tx?.wait(2);
+      loopScanUrl(tx?.hash);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const SwapButton = () => {
+    if (!account) {
+      return (
+        <Button onClick={() => connect("metamask")}>Connect Wallet</Button>
+      );
+    } else {
+      if (toBN(amountIn).multipliedBy(1e18).gt(toBN(balance))) {
+        return <Button disabled>Invalid Amount In</Button>;
+      } else {
+        return (
+          <Button loading={loading} onClick={handleSwap}>
+            Swap
+          </Button>
+        );
+      }
+    }
   };
 
   return (
     <div className={styles.swapWrapper}>
+      {contextHolder}
       <InputBox
         showTokenList={() => setIsShowTokenList(true)}
         showChainList={() => {
@@ -45,7 +109,7 @@ export default function Swap() {
         chainId={fromChainId}
         onChange={(e) => {
           const value = e.target.value as NumType;
-          setAmountIn(onlyNumber({ num: value, decimals: 2 }));
+          setAmountIn(onlyNumber({ num: value }));
         }}
       />
       {/* exchange icon */}
@@ -60,11 +124,12 @@ export default function Swap() {
         }}
       />
       <div className={styles.swapButton}>
-        {account ? (
-          <Button>Swap</Button>
+        {SwapButton()}
+        {/* {account ? (
+          <Button onClick={handleSwap}>Swap</Button>
         ) : (
           <Button onClick={() => connect("metamask")}>Connect Wallet</Button>
-        )}
+        )} */}
       </div>
 
       <TokenListModal
@@ -84,7 +149,6 @@ export default function Swap() {
           } else {
             setToChainId(chainId);
           }
-          console.log("selected chain", chainId);
           setIsShowChainList(false);
         }}
       />

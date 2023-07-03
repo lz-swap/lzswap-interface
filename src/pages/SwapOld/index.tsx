@@ -18,7 +18,7 @@ import { toBN } from "@/utils/bn";
 import { parseEther } from "ethers/lib/utils";
 import styles from "./index.less";
 
-export default function Swap() {
+export default function SwapOld() {
   const { swapAndBridge } = useSwapAndBrdige();
   const { getAmountsOut } = useUniswap();
   const { estimateSendFee } = useOFT();

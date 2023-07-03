@@ -2,6 +2,7 @@ import styles from "./index.less";
 import { Input, InputProps } from "antd";
 import { ChainList } from "@/constants/chainlist";
 import { BigNumberLike, toBN } from "@/utils/bn";
+import { BigNumber } from "ethers";
 
 interface InputBoxProps extends InputProps {
   chainId: number;
@@ -38,7 +39,7 @@ export default function InputBox({
         <div className={styles.balanceInfo}>
           <span>Send</span>
           <span onClick={inputMax}>
-            MAX: {toBN(balance).div(1e18).toFixed(2)}
+            MAX: {toBN(balance).div(1e14).integerValue(1).div(10000).toString()}
           </span>
         </div>
         <div className={styles.inputBox}>
